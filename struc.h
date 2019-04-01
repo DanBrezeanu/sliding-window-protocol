@@ -15,14 +15,14 @@
     send_message(&t);
 
 #define RECV_ACK(t) if(recv_message(&t) >= 0)\
-    printf("ACK\n");
+    printf("ACK %s\n", t.payload);
 
 #define RECV_MSG(r)  if (recv_message(&r)<0){ \
    perror("Receive message"); \
    return -1; \
  }
 
- #define SEND_ACK(t) sprintf(t.payload,"ACK");\
+ #define SEND_ACK(t, seq) sprintf(t.payload,"%d", seq);\
     t.len = strlen(t.payload+1);\
     send_message(&t);
 
@@ -33,6 +33,6 @@
 typedef struct {
     char message[MESSAGE_SIZE];
     int seq_number;
-} message;
+} __attribute__((packed)) message;
 
 #endif
