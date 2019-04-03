@@ -1,4 +1,4 @@
-#include "struc.h"
+#include "utils.h"
 #include <sys/types.h>
 #include <sys/stat.h>
 
@@ -29,6 +29,7 @@ int main(int argc,char** argv){
       printf("%d\n", MIN(MESSAGE_SIZE, file_size));
       memcpy(tm.message, file_buffer + buffer_index, MIN(MESSAGE_SIZE, file_size));
       tm.seq_number = ++current_frame;
+      tm.chksum = compute_checksum(tm.message);
 
       memcpy(t.payload, &tm, sizeof(tm));
       buffer_index += MIN(MESSAGE_SIZE, file_size);
@@ -44,6 +45,7 @@ int main(int argc,char** argv){
 
       memcpy(tm.message, file_buffer + buffer_index, MIN(MESSAGE_SIZE, file_size));
       tm.seq_number = ++current_frame;
+      tm.chksum = compute_checksum(tm.message);
 
       memcpy(t.payload, &tm, sizeof(tm));
       buffer_index += MIN(MESSAGE_SIZE, file_size);

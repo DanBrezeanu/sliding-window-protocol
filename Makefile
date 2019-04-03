@@ -10,7 +10,7 @@ recv: recv.o link_emulator/lib.o
 	gcc -g recv.o link_emulator/lib.o -o recv
 
 .c.o:
-	gcc -Wall -g -c $?
+	gcc -Wall -std=gnu99 -g -c $?
 
 clean:
 	$(MAKE) -C link_emulator clean

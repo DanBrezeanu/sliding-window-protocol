@@ -1,4 +1,4 @@
-#include "struc.h"
+#include "uils.h"
 
 #define PORT 10001
 
@@ -19,6 +19,10 @@ int main(int argc,char** argv){
 
       memcpy(&rm, r.payload, sizeof(r.payload));
 
+      if (compute_checksum(rm.message) != rm.chksum){
+          SEND_NACK(t, rm.seq_number);
+      }
+
       if(r.len < MESSAGE_SIZE)
         bytes_written = write(fd, rm.message, r.len - 1);
       else
@@ -31,6 +35,6 @@ int main(int argc,char** argv){
       //   break;
   }
   close(fd);
-  printf("here");
+  printf("here"); 
   return 0;
 }
