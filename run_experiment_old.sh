@@ -1,6 +1,6 @@
 #!/bin/bash
 
-SPEED=1000
+SPEED=20
 DELAY=10
 LOSS=0
 REORDER=0
@@ -21,4 +21,5 @@ sleep 1
 time ./send $FILENAME $SPEED $DELAY
 
 echo "[SCRIPT] Finished transfer, checking files: $FILENAME recv_$FILENAME"
+ps aux | grep recv
 diff $FILENAME recv_$FILENAME

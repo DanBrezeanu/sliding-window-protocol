@@ -1,0 +1,28 @@
+Am implementat un protocol de fereastra de glisanta care trimite pachetele
+intr-un timp minim, retrimitand pachetele pierdute / corupte / reordonate.
+
+In sender:
+  - prima data se trimite un header ce contine numele si dimensiunea fisierului
+  - se creeaza un buffer ce contine toate pachetele ce urmeaza a fi trimise
+  - se umple legatura de date cu pachete egale cu dimensiunea ferestrei
+  - se astepata pentru restul de n - window_size pachete ACK
+      - daca s-a primit ACK, se marcheaza pachetul ca receptionat cu succes si
+        se transmite urmatorul pachet
+      - daca s-a primit NACK, se retransmite pachetul
+      - daca primirea ACK-ului s-a terminat cu timeout, atunci se cauta ultimul
+        pachet pentru care nu s-a primit ACK si se retrimite
+
+  - dupa ce au fost transmise toate pachetele, se asteapta ACK-uri pentru
+    pachetele ramase in legatura
+  - cand s-a primit si ultimul ACK, adica cand s-a primit pachetul ce contine
+    END, programul se termina
+
+ In reciever:
+   - prima data se primeste header-ul
+   - se primeste cate un pachet o data
+   - se verifica checksum sa corespunda
+      - daca nu corespunde, se trimite NACK
+      - daca corespunde, se trimite ACK si se salveaza in buffer pachetul primit
+   - loop-ul se termina cand s-a trimis ACK pentru toate pachetele
+   - se scrie in fisier buffer-ul de pachete
+   - se trimite pachetul de sfarsit
